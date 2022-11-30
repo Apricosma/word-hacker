@@ -12,11 +12,24 @@
         <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
         <title>Word Hack</title>
         <link rel="stylesheet" type="text/css" href="assets/style/index.css">
-        <script src="assets/script/index.js" defer></script>
+        <script type="module" src="assets/script/index.js" defer></script>
     </head>
     <body>
         <main>
-
+            <div class="container flexbox">
+                <div class="game-box">
+                    <div class="welcome">
+                        <h2>Welcome...</h2>
+                        <p>Are you ready for a challenge...?</p>
+                        <p>Type the following words as fast as you can...</p>
+                    </div>
+                    <input type="button" class="start-game" value="Start">
+                </div>
+            </div>
+            <div class="game container flexbox">
+                <input type="text" class="user-input">
+                <h2 class="timer">Ready?</h2>
+            </div>
         </main>
     </body>
 </html>
