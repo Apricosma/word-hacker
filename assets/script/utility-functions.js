@@ -1,4 +1,4 @@
-import { welcome, startButton, gameGui, randomizedWord } from "./index.js";
+import { welcome, startButton, gameGui, randomizedWord, upcomingWord } from "./index.js";
 
 function select(selector, parent = document) {
     return parent.querySelector(selector);
@@ -27,7 +27,11 @@ function showGame() {
 }
 
 function showWord() {
-    randomizedWord.style.display = 'flex';
+    randomizedWord.style.display = 'block';
 }
 
-export { select, selectAll, onEvent, hideWelcome, showWelcome, showGame, showWord };
+function showNextWord() {
+    upcomingWord.style.display = 'block';
+}
+
+export { select, selectAll, onEvent, hideWelcome, showWelcome, showGame, showWord, showNextWord };

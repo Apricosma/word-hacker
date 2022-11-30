@@ -34,7 +34,7 @@ body {
     font-size: 48px;
 }
 
-.start-game {
+.start-game, .restart {
     padding: 5px 20px;
     width: 100px;
     margin: 0 50px;
@@ -87,10 +87,27 @@ body {
     margin-bottom: 5px;
 }
 
+.next-word {
+    display: none;
+    color: #c7486862;
+    position: absolute;
+    right: 750px;
+    top: 425px;
+}
+
 .hackercode {
     width: 500px;
 }
 
 .hacker-container {
     position: absolute;
+}
+
+.score-board {
+    background-color: var(--app-dark-bg);
+    width: 400px;
+    height: 800px;
+    position: absolute;
+    right: 0;
+    top: 0;
 }

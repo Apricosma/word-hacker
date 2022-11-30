@@ -1,4 +1,4 @@
-import { select, onEvent, hideWelcome, showWelcome, showGame, showWord } from "./utility-functions.js";
+import { select, onEvent, hideWelcome, showWelcome, showGame, showWord, showNextWord } from "./utility-functions.js";
 import { Score } from './score.js'
 import { hackerText } from "./hackercode.js";
 'use strict';
@@ -28,6 +28,9 @@ const gameGui = select('.game');
 const timeOutput = select('.timer');
 const randomizedWord = select('.word')
 const playerInput = select('.user-input');
+const upcomingWord = select('.next-word');
+const restartGame = select('.restart');
+const scoreBoard = select('.score-board');
 
 window.onload = (event) => {
     gameGui.style.display = "none";
@@ -39,6 +42,7 @@ onEvent('click', startButton, function() {
     showGame();
     startCountdown();
     setTimeout(showWord, 4000);
+    setTimeout(showNextWord, 4000);
     getWord(); // gets a random word from the array
 })
 
@@ -66,9 +70,9 @@ function startCountdown() {
 
 // Game timer
 let timeOver = false;
-let seconds = 99;
+let seconds = 30; // set the game's timer here
 function gameTimer() {    
-    if (seconds < 99) {
+    if (seconds < 30) { // also change here for game timer
         timeOutput.innerHTML = seconds;
     }
     if (seconds > 0) {
@@ -80,7 +84,7 @@ function gameTimer() {
     }
 
     if (timeOver) {
-        console.log(scoreCount);
+        endGame();
     }
 
     if (!timer) {
@@ -90,25 +94,43 @@ function gameTimer() {
     }
 }
 
-
 // Display word
+let nextWord = '';
 let currentWord = '';
 function getWord() {
-    const randomWordIndex = Math.floor(Math.random() * words.length);
-    let outputWord = words[randomWordIndex];
-    randomizedWord.innerHTML = outputWord;
-    currentWord = outputWord;
+
+    if (randomizedWord.textContent === '') { // called once at the beginning
+        getNextWord();
+        const randomWordIndex = Math.floor(Math.random() * words.length);
+        let outputWord = words[randomWordIndex];
+        randomizedWord.innerHTML = outputWord;
+        currentWord = outputWord;
+    } else { // called for the rest of the game, sets the current word to the next word
+        randomizedWord.innerHTML = nextWord;
+        currentWord = nextWord;
+        upcomingWord.innerHTML = getNextWord();
+    }
+
     return currentWord;
+}
+
+function getNextWord() {
+    const nextWordIndex = Math.floor(Math.random() * words.length);
+    let followingWord = words[nextWordIndex];
+    upcomingWord.innerHTML = followingWord;
+    nextWord = followingWord;
+    return nextWord;
 }
 
 playerInput.onkeyup = function() {
     checkWord()
     hackerText();
+    console.log(scoreCount);
 };
 
 let scoreCount = 0;
 function checkWord() {
-    let inputWord = playerInput.value.toLowerCase();
+    let inputWord = playerInput.value.trim();
     if (inputWord == currentWord && inputWord != '') {
         console.log(`Word is same`);
         playerInput.value = '';
@@ -117,9 +139,54 @@ function checkWord() {
     }
 }
 
+function getDate() {
+    // let date = new Date().toLocaleDateString();
+    // return date;
 
+    let time = new Date();
+    let hh = time.getHours();
+    let mm = time.getMinutes();
+    return `${hh}:${mm}`;
+}
 
+function endGame() {
+    playerInput.blur(); // removes focus from the input
 
+    const score = new Score(getDate(), scoreCount, 100);
+    if (score.hits < 20) {
+        randomizedWord.innerHTML = 'Less than 20? Please, try harder...';
+    } else if (score.hits < 40) {
+        randomizedWord.innerHTML = 'Couldn\'t get over 40? Close, but no cigar';
+    } else if (score.hits < 60) {
+        randomizedWord.innerHTML = 'You hacked into the mainframe, but elite cyber security detected';
+    } else if (score.hits < 80) {
+        randomizedWord.innerHTML = 'You managed to hack into the mainframe undetected!';
+    } else if (score.hits >= 100) {
+        randomizedWord.innerHTML = 'WOW! You\'re an ELITE hacker <br> why are you here? Go do something useful!';
+    }
 
+    let scorePost = document.createElement('p');
+    scoreBoard.prepend(scorePost);
+    scorePost.innerHTML = `Score: ${score.hits} | Accuracy: ${score.percentage}% | ${score.date}`;
+    scorePost.classList.add('score-output');
 
-export { startButton, welcome, gameGui, randomizedWord };
+}
+
+onEvent('click', restartGame, function() {
+    // resets game variables
+    scoreCount = 0;
+    seconds = 30;
+    countDown = 4;
+    // resets the html
+    timeOutput.innerHTML = 'Ready?';
+    randomizedWord.style.display = 'none';
+    upcomingWord.style.display = 'none';
+
+    // calls the game functions again
+    startCountdown();
+    setTimeout(showWord, 4000);
+    setTimeout(showNextWord, 4000);
+    getWord();
+});
+
+export { startButton, welcome, gameGui, randomizedWord, upcomingWord };
