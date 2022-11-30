@@ -1,5 +1,6 @@
-import { select, onEvent, hideWelcome, showWelcome, showGame, selectAll } from "./utility-functions.js";
+import { select, onEvent, hideWelcome, showWelcome, showGame, showWord } from "./utility-functions.js";
 import { Score } from './score.js'
+import { hackerText } from "./hackercode.js";
 'use strict';
 
 // Words
@@ -25,22 +26,25 @@ const startButton = select('.start-game');
 const welcome = select('.welcome');
 const gameGui = select('.game');
 const timeOutput = select('.timer');
+const randomizedWord = select('.word')
+const playerInput = select('.user-input');
 
 window.onload = (event) => {
     gameGui.style.display = "none";
 }
+
 // Hides the welcome screen and begins game
 onEvent('click', startButton, function() {
     hideWelcome();
     showGame();
     startCountdown();
+    setTimeout(showWord, 4000);
+    getWord(); // gets a random word from the array
 })
 
-
-
+// Countdown timer to game start
 let timer;
 let countDown = 4;
-let seconds = 99;
 
 function startCountdown() {
     if (countDown < 4) {
@@ -60,6 +64,9 @@ function startCountdown() {
     }
 }
 
+// Game timer
+let timeOver = false;
+let seconds = 99;
 function gameTimer() {    
     if (seconds < 99) {
         timeOutput.innerHTML = seconds;
@@ -69,6 +76,11 @@ function gameTimer() {
     } else {
         clearInterval(timer);
         timeOutput.style.color = 'red';
+        timeOver = true;
+    }
+
+    if (timeOver) {
+        console.log(scoreCount);
     }
 
     if (!timer) {
@@ -78,4 +90,36 @@ function gameTimer() {
     }
 }
 
-export { startButton, welcome, gameGui };
+
+// Display word
+let currentWord = '';
+function getWord() {
+    const randomWordIndex = Math.floor(Math.random() * words.length);
+    let outputWord = words[randomWordIndex];
+    randomizedWord.innerHTML = outputWord;
+    currentWord = outputWord;
+    return currentWord;
+}
+
+playerInput.onkeyup = function() {
+    checkWord()
+    hackerText();
+};
+
+let scoreCount = 0;
+function checkWord() {
+    let inputWord = playerInput.value.toLowerCase();
+    if (inputWord == currentWord && inputWord != '') {
+        console.log(`Word is same`);
+        playerInput.value = '';
+        scoreCount++
+        getWord();
+    }
+}
+
+
+
+
+
+
+export { startButton, welcome, gameGui, randomizedWord };
