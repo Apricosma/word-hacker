@@ -76,9 +76,9 @@ function startCountdown() {
 
 // Game timer
 let timeOver = false;
-var seconds = 5; // set the game's timer here
+var seconds = 99; // set the game's timer here
 function gameTimer() {    
-    if (seconds < 5) { // also change here for game timer
+    if (seconds < 99) { // also change here for game timer
         timeOutput.innerHTML = seconds;
         console.log(seconds);
     }
@@ -157,11 +157,11 @@ function endGame() {
 
     const score = new Score(getDate(), scoreCount, 100);
     if (score.hits < 20) {
-        randomizedWord.innerHTML = 'Less than 20? Please, try harder...';
+        randomizedWord.innerHTML = 'Less than 20? The firewall annihilated you';
     } else if (score.hits < 40) {
         randomizedWord.innerHTML = 'Couldn\'t get over 40? Close, but no cigar';
     } else if (score.hits < 60) {
-        randomizedWord.innerHTML = 'You hacked into the mainframe, but elite cyber security detected';
+        randomizedWord.innerHTML = 'You hacked into the mainframe, but elite cyber security detected your presence';
     } else if (score.hits < 80) {
         randomizedWord.innerHTML = 'You managed to hack into the mainframe undetected!';
     } else if (score.hits >= 100) {
