@@ -145,9 +145,6 @@ function checkWord() {
 }
 
 function getDate() {
-    // let date = new Date().toLocaleDateString();
-    // return date;
-
     let time = new Date();
     let hh = time.getHours();
     let mm = time.getMinutes();
