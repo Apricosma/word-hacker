@@ -13,9 +13,8 @@ function randomString(length) {
 }
 
 function hackerText() {
-    let stringOutput = btoa(randomString(3))
+    let stringOutput = btoa(randomString(3));
     output.innerHTML += stringOutput;
-
 }
 
 export { hackerText }

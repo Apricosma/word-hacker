@@ -31,10 +31,14 @@ const playerInput = select('.user-input');
 const upcomingWord = select('.next-word');
 const restartGame = select('.restart');
 const scoreBoard = select('.score-board');
+const output = select('.hackercode')
 
 window.onload = (event) => {
     gameGui.style.display = "none";
 }
+
+let audio = new Audio('./assets/media/gamemusic.mp3');
+
 
 // Hides the welcome screen and begins game
 onEvent('click', startButton, function() {
@@ -44,14 +48,15 @@ onEvent('click', startButton, function() {
     setTimeout(showWord, 4000);
     setTimeout(showNextWord, 4000);
     getWord(); // gets a random word from the array
+    audio.play();
 })
 
 // Countdown timer to game start
-let timer;
-let countDown = 4;
+var timer;
 
+var countDown = 4;
 function startCountdown() {
-    if (countDown < 4) {
+    if (countDown < 4 && countDown > 0) {
         timeOutput.innerHTML = countDown;
     }
     if (countDown > 0) {
@@ -66,14 +71,16 @@ function startCountdown() {
             startCountdown();
         }, 1000); // 1000ms
     }
+    
 }
 
 // Game timer
 let timeOver = false;
-let seconds = 30; // set the game's timer here
+var seconds = 5; // set the game's timer here
 function gameTimer() {    
-    if (seconds < 30) { // also change here for game timer
+    if (seconds < 5) { // also change here for game timer
         timeOutput.innerHTML = seconds;
+        console.log(seconds);
     }
     if (seconds > 0) {
         seconds--;
@@ -125,14 +132,12 @@ function getNextWord() {
 playerInput.onkeyup = function() {
     checkWord()
     hackerText();
-    console.log(scoreCount);
 };
 
 let scoreCount = 0;
 function checkWord() {
     let inputWord = playerInput.value.trim();
     if (inputWord == currentWord && inputWord != '') {
-        console.log(`Word is same`);
         playerInput.value = '';
         scoreCount++
         getWord();
@@ -150,6 +155,7 @@ function getDate() {
 }
 
 function endGame() {
+    upcomingWord.style.display = 'none';
     playerInput.blur(); // removes focus from the input
 
     const score = new Score(getDate(), scoreCount, 100);
@@ -169,24 +175,25 @@ function endGame() {
     scoreBoard.prepend(scorePost);
     scorePost.innerHTML = `Score: ${score.hits} | Accuracy: ${score.percentage}% | ${score.date}`;
     scorePost.classList.add('score-output');
-
+    audio.pause();
+    audio.currentTime = 0;
 }
 
+
 onEvent('click', restartGame, function() {
-    // resets game variables
-    scoreCount = 0;
-    seconds = 30;
     countDown = 4;
+    seconds = 99;
+    output.innerHTML = '';
     // resets the html
     timeOutput.innerHTML = 'Ready?';
-    randomizedWord.style.display = 'none';
-    upcomingWord.style.display = 'none';
+    timeOutput.style.color = 'var(--app-pink)';
 
     // calls the game functions again
     startCountdown();
     setTimeout(showWord, 4000);
     setTimeout(showNextWord, 4000);
     getWord();
+    audio.play();
 });
 
 export { startButton, welcome, gameGui, randomizedWord, upcomingWord };
