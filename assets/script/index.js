@@ -45,60 +45,52 @@ onEvent('click', startButton, function() {
     hideWelcome();
     showGame();
     startCountdown();
-    setTimeout(showWord, 4000);
-    setTimeout(showNextWord, 4000);
+    setTimeout(showWord, 5000);
+    setTimeout(showNextWord, 5000);
     getWord(); // gets a random word from the array
     audio.play();
 })
 
 // Countdown timer to game start
-var timer;
 
-var countDown = 4;
+const MAX_COUNTDOWN_SECONDS = 4;
+let currentCountdown = MAX_COUNTDOWN_SECONDS;
+let countdownInterval;
 function startCountdown() {
-    if (countDown < 4 && countDown > 0) {
-        timeOutput.innerHTML = countDown;
-    }
-    if (countDown > 0) {
-        countDown--;
-    } else {
-        timeOutput.innerHTML = 'Go!';
-        gameTimer(); // calls the game timer
-    }
+    currentCountdown = MAX_COUNTDOWN_SECONDS;
 
-    if (!timer) {
-        timer = window.setInterval(function() {
-            startCountdown();
-        }, 1000); // 1000ms
-    }
-    
+    countdownInterval = setInterval(() => {
+        
+        currentCountdown--;
+        timeOutput.innerHTML = currentCountdown;
+        console.log(currentCountdown);
+        if (currentCountdown <= 0) {
+            timeOutput.innerHTML = 'Go!';
+            clearInterval(countdownInterval);
+            gameTimer()
+        }
+    }, 1000)
 }
 
 // Game timer
-let timeOver = false;
-var seconds = 99; // set the game's timer here
+const MAX_GAME_SECONDS = 99; // set the game's timer here
+let currentTime = MAX_GAME_SECONDS;
+let currentInterval;
+
 function gameTimer() {    
-    if (seconds < 99) { // also change here for game timer
-        timeOutput.innerHTML = seconds;
-        console.log(seconds);
-    }
-    if (seconds > 0) {
-        seconds--;
-    } else {
-        clearInterval(timer);
-        timeOutput.style.color = 'red';
-        timeOver = true;
-    }
+    currentTime = MAX_GAME_SECONDS;
 
-    if (timeOver) {
-        endGame();
-    }
-
-    if (!timer) {
-        timer = window.setInterval(function() {
-            gameTimer();
-        }, 1000); // 1000ms
-    }
+    currentInterval = setInterval(() => {
+        
+        currentTime--;
+        timeOutput.innerHTML = currentTime;
+        console.log(currentTime);
+        if (currentTime <= 0) {
+            timeOutput.style.color = 'red';
+            endGame();
+            clearInterval(currentInterval);
+        }
+    }, 1000);
 }
 
 // Display word
@@ -152,6 +144,7 @@ function getDate() {
 }
 
 function endGame() {
+    clearInterval(currentInterval);
     upcomingWord.style.display = 'none';
     playerInput.blur(); // removes focus from the input
 
@@ -178,8 +171,7 @@ function endGame() {
 
 
 onEvent('click', restartGame, function() {
-    countDown = 4;
-    seconds = 99;
+    clearInterval(currentInterval);
     output.innerHTML = '';
     // resets the html
     timeOutput.innerHTML = 'Ready?';
