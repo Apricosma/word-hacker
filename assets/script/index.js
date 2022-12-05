@@ -45,9 +45,10 @@ onEvent('click', startButton, function() {
     hideWelcome();
     showGame();
     startCountdown();
-    setTimeout(showWord, 5000);
-    setTimeout(showNextWord, 5000);
+    setTimeout(showWord, 4000);
+    setTimeout(showNextWord, 4000);
     getWord(); // gets a random word from the array
+    audio.volume = 0.15;
     audio.play();
 })
 
@@ -143,28 +144,34 @@ function getDate() {
     return `${hh}:${mm}`;
 }
 
+// print to scoreboard
+function printScore() {
+    const score = new Score(getDate(), scoreCount, 100);
+    let scorePost = document.createElement('p');
+    scoreBoard.append(scorePost);
+    scorePost.innerHTML = `Score: ${score.hits} | Accuracy: ${score.percentage}% | ${score.date}`;
+    scorePost.classList.add('score-output');
+    return score;
+}
+
 function endGame() {
     clearInterval(currentInterval);
     upcomingWord.style.display = 'none';
     playerInput.blur(); // removes focus from the input
 
-    const score = new Score(getDate(), scoreCount, 100);
-    if (score.hits < 20) {
+    printScore()
+
+    if (scoreCount < 20) {
         randomizedWord.innerHTML = 'Less than 20? The firewall annihilated you';
-    } else if (score.hits < 40) {
+    } else if (scoreCount.hits < 40) {
         randomizedWord.innerHTML = 'Couldn\'t get over 40? Close, but no cigar';
-    } else if (score.hits < 60) {
+    } else if (scoreCount.hits < 60) {
         randomizedWord.innerHTML = 'You hacked into the mainframe, but elite cyber security detected your presence';
-    } else if (score.hits < 80) {
+    } else if (scoreCount.hits < 80) {
         randomizedWord.innerHTML = 'You managed to hack into the mainframe undetected!';
-    } else if (score.hits >= 100) {
+    } else if (scoreCount.hits >= 100) {
         randomizedWord.innerHTML = 'WOW! You\'re an ELITE hacker <br> why are you here? Go do something useful!';
     }
-
-    let scorePost = document.createElement('p');
-    scoreBoard.prepend(scorePost);
-    scorePost.innerHTML = `Score: ${score.hits} | Accuracy: ${score.percentage}% | ${score.date}`;
-    scorePost.classList.add('score-output');
     audio.pause();
     audio.currentTime = 0;
 }
@@ -172,6 +179,7 @@ function endGame() {
 
 onEvent('click', restartGame, function() {
     clearInterval(currentInterval);
+    printScore();
     output.innerHTML = '';
     // resets the html
     timeOutput.innerHTML = 'Ready?';
