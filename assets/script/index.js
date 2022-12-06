@@ -58,6 +58,7 @@ const MAX_COUNTDOWN_SECONDS = 4;
 let currentCountdown = MAX_COUNTDOWN_SECONDS;
 let countdownInterval;
 function startCountdown() {
+    clearInterval(countdownInterval);
     currentCountdown = MAX_COUNTDOWN_SECONDS;
 
     countdownInterval = setInterval(() => {
@@ -74,7 +75,7 @@ function startCountdown() {
 }
 
 // Game timer
-const MAX_GAME_SECONDS = 99; // set the game's timer here
+const MAX_GAME_SECONDS = 5; // set the game's timer here
 let currentTime = MAX_GAME_SECONDS;
 let currentInterval;
 
@@ -161,6 +162,7 @@ function endGame() {
 
     printScore()
 
+    console.log(scoreCount);
     if (scoreCount < 20) {
         randomizedWord.innerHTML = 'Less than 20? The firewall annihilated you';
     } else if (scoreCount.hits < 40) {
@@ -174,12 +176,12 @@ function endGame() {
     }
     audio.pause();
     audio.currentTime = 0;
+    scoreCount = 0;
 }
 
 
 onEvent('click', restartGame, function() {
     clearInterval(currentInterval);
-    printScore();
     output.innerHTML = '';
     // resets the html
     timeOutput.innerHTML = 'Ready?';
@@ -191,6 +193,7 @@ onEvent('click', restartGame, function() {
     setTimeout(showNextWord, 4000);
     getWord();
     audio.play();
+    scoreCount = 0;
 });
 
 export { startButton, welcome, gameGui, randomizedWord, upcomingWord };
