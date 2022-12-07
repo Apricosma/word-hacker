@@ -196,11 +196,17 @@ function getScore() {
         percentage: score.percentage
     });
 }
-let jsonParse = JSON.parse(localStorage.getItem('playerscores'));
-console.log(jsonParse);
-for (const player of jsonParse) {
-    console.log(`Score: ${player.hits} | Percentage: ${player.percentage} | ${player.date}`);
+
+if (localStorage.getItem('playerscores') === null) {
+    console.log(`No scores found`);
+} else {
+    let jsonParse = JSON.parse(localStorage.getItem('playerscores'));
+    console.log(jsonParse);
+    for (const player of jsonParse) {
+        console.log(`Score: ${player.hits} | Percentage: ${player.percentage} | ${player.date}`);
+    }
 }
+
 
 
 function endGame() {
