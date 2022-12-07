@@ -75,7 +75,7 @@ function startCountdown() {
 }
 
 // Game timer
-const MAX_GAME_SECONDS = 3; // set the game's timer here
+const MAX_GAME_SECONDS = 99; // set the game's timer here
 let currentTime = MAX_GAME_SECONDS;
 let currentInterval;
 
