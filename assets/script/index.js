@@ -65,7 +65,7 @@ function startCountdown() {
         
         currentCountdown--;
         timeOutput.innerHTML = currentCountdown;
-        console.log(currentCountdown);
+        
         if (currentCountdown <= 0) {
             timeOutput.innerHTML = 'Go!';
             clearInterval(countdownInterval);
@@ -75,7 +75,7 @@ function startCountdown() {
 }
 
 // Game timer
-const MAX_GAME_SECONDS = 5; // set the game's timer here
+const MAX_GAME_SECONDS = 3; // set the game's timer here
 let currentTime = MAX_GAME_SECONDS;
 let currentInterval;
 
@@ -86,7 +86,7 @@ function gameTimer() {
         
         currentTime--;
         timeOutput.innerHTML = currentTime;
-        console.log(currentTime);
+        
         if (currentTime <= 0) {
             timeOutput.style.color = 'red';
             endGame();
@@ -145,24 +145,72 @@ function getDate() {
     return `${hh}:${mm}`;
 }
 
+
 // print to scoreboard
-function printScore() {
+let scoreArray = [];
+let scoreBoardArray = [];
+function getScore() {
+
     const score = new Score(getDate(), scoreCount, 100);
-    let scorePost = document.createElement('p');
-    scoreBoard.append(scorePost);
-    scorePost.innerHTML = `Score: ${score.hits} | Accuracy: ${score.percentage}% | ${score.date}`;
-    scorePost.classList.add('score-output');
-    return score;
+    scoreArray.push(score);
+
+    let sortedScore = (scoreArray) => {
+        return scoreArray.sort((a, b) => {
+            return b.hits - a.hits;
+        });
+    }
+    scoreBoardArray = sortedScore(scoreArray);
+    // console.log(scoreBoardArray);
+
+    // removes all HTML nodes from scoreboard
+    const nodes = document.querySelectorAll('.node');
+    nodes.forEach((item) => {
+        item.remove();
+    })
+
+    let displayScoreBoard = []
+    displayScoreBoard = scoreBoardArray;
+    
+
+    // loops through array and prints to scoreboard
+    for (let i = 0; i < displayScoreBoard.length; i++) {
+        let element = document.createElement('p');
+        element.classList.add('score-output', 'node');
+        element.innerHTML = `Score: ${displayScoreBoard[i].hits} | 
+                             Accuracy: ${displayScoreBoard[i].percentage} |
+                             ${displayScoreBoard[i].date}`
+
+        scoreBoard.append(element);
+    }
+    console.log(displayScoreBoard); 
+
+    function saveDataToLocalStorage(data) {
+        let array = [];
+        array = JSON.parse(localStorage.getItem('playerscores')) || [];
+        array.push(data);
+        localStorage.setItem('playerscores', JSON.stringify(array));
+    }
+    saveDataToLocalStorage({
+        date: score.date,
+        hits: score.hits,
+        percentage: score.percentage
+    });
 }
+let jsonParse = JSON.parse(localStorage.getItem('playerscores'));
+console.log(jsonParse);
+for (const player of jsonParse) {
+    console.log(`Score: ${player.hits} | Percentage: ${player.percentage} | ${player.date}`);
+}
+
 
 function endGame() {
     clearInterval(currentInterval);
     upcomingWord.style.display = 'none';
     playerInput.blur(); // removes focus from the input
 
-    printScore()
+    getScore();
+    // displayScore();
 
-    console.log(scoreCount);
     if (scoreCount < 20) {
         randomizedWord.innerHTML = 'Less than 20? The firewall annihilated you';
     } else if (scoreCount.hits < 40) {

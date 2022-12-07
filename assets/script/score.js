@@ -20,6 +20,12 @@ class Score {
     get percentage() {
         return this.#percentage
     }
+
+    stringify() {
+        return JSON.stringify({date: this.#date, 
+                                hits: this.#hits, 
+                                percentage: this.#percentage});
+    }
 }
 
 export { Score };
