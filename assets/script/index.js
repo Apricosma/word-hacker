@@ -34,19 +34,30 @@ const scoreBoard = select('.score-board');
 const output = select('.hackercode')
 
 window.onload = (event) => {
+    // hides the game on welcome screen
     gameGui.style.display = "none";
 
-    // loops through array and prints to scoreboard
-    // for (let i = 0; i < scoreArray.length; i++) {
-    //     let element = document.createElement('p');
-    //     element.classList.add('score-output', 'node');
-    //     element.innerHTML = `Score: ${scoreArray[i].hits} | 
-    //                          Accuracy: ${scoreArray[i].percentage} |
-    //                          ${scoreArray[i].date}`
-
-    //     scoreBoard.append(element);
-    // }
-    printToScoreboard(scoreArray);
+    // checks local storage for playerscores
+    let localStorageArray;
+    if (localStorage.getItem('playerscores') === null) {
+        console.log(`No scores found`);
+    } else {
+        // get localStorage objects
+        localStorageArray = JSON.parse(localStorage.getItem('playerscores'))
+        
+        // sorts and returns a sorted array from local storage
+        let sortedLocalStorageArray;
+        let sortedScore = (localStorageArray) => {
+            return localStorageArray.sort((a, b) => {
+                return b.hits - a.hits;
+            });
+        }
+        sortedLocalStorageArray = sortedScore(localStorageArray);
+        // add the array to the global score array
+        scoreArray.push(...sortedLocalStorageArray);
+        printToScoreboard(scoreArray);
+}
+    
 }
 
 let audio = new Audio('./assets/media/gamemusic.mp3');
@@ -76,7 +87,6 @@ onEvent('click', startButton, function() {
 })
 
 // Countdown timer to game start
-
 const MAX_COUNTDOWN_SECONDS = 4;
 let currentCountdown = MAX_COUNTDOWN_SECONDS;
 let countdownInterval;
@@ -146,6 +156,7 @@ function getNextWord() {
     return nextWord;
 }
 
+// calls the word check function every keyup
 playerInput.onkeyup = function() {
     checkWord()
     hackerText();
@@ -162,31 +173,18 @@ function checkWord() {
 }
 
 function getDate() {
-    let time = new Date();
-    let hh = time.getHours();
-    let mm = time.getMinutes();
-    return `${hh}:${mm}`;
+    const date = new Date();
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1;
+    const day = date.getUTCDate();
+    const hh = date.getHours();
+    const mm = date.getMinutes();
+
+    return `${[year, month, day].join('-')} ${hh}:${mm}`;
 }
-
-// checks local storage for playerscores
-let localStorageArray;
-if (localStorage.getItem('playerscores') === null) {
-    console.log(`No scores found`);
-} else {
-    // get localStorage objects
-    localStorageArray = JSON.parse(localStorage.getItem('playerscores'))
-    console.log(localStorageArray);
-
-    // for (const player of jsonParse) {
-    //     console.log(`Score: ${player.hits} | Percentage: ${player.percentage} | ${player.date}`);
-    // }
-}
-
 
 // print to scoreboard
 let scoreArray = [];
-scoreArray.push(...localStorageArray);
-console.log(scoreArray);
 let scoreBoardArray = [];
 function getScore() {
 
@@ -199,7 +197,6 @@ function getScore() {
         });
     }
     scoreBoardArray = sortedScore(scoreArray);
-    // console.log(scoreBoardArray);
 
     // removes all HTML nodes from scoreboard
     const nodes = document.querySelectorAll('.node');
@@ -209,26 +206,14 @@ function getScore() {
 
     let displayScoreBoard = []
     displayScoreBoard = scoreBoardArray;
-    
-
-    // loops through array and prints to scoreboard
-    // for (let i = 0; i < displayScoreBoard.length; i++) {
-    //     let element = document.createElement('p');
-    //     element.classList.add('score-output', 'node');
-    //     element.innerHTML = `Score: ${displayScoreBoard[i].hits} | 
-    //                          Accuracy: ${displayScoreBoard[i].percentage} |
-    //                          ${displayScoreBoard[i].date}`
-
-    //     scoreBoard.append(element);
-    // }
-    // console.log(displayScoreBoard); 
     printToScoreboard(displayScoreBoard);
-
 
     function saveDataToLocalStorage(data) {
         let array = [];
         array = JSON.parse(localStorage.getItem('playerscores')) || [];
         array.push(data);
+        
+
         localStorage.setItem('playerscores', JSON.stringify(array));
     }
     saveDataToLocalStorage({
@@ -238,17 +223,12 @@ function getScore() {
     });
 }
 
-
-
-
-
 function endGame() {
     clearInterval(currentInterval);
     upcomingWord.style.display = 'none';
     playerInput.blur(); // removes focus from the input
 
     getScore();
-    // displayScore();
 
     if (scoreCount < 20) {
         randomizedWord.innerHTML = 'Less than 20? The firewall annihilated you';
