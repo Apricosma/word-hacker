@@ -35,10 +35,33 @@ const output = select('.hackercode')
 
 window.onload = (event) => {
     gameGui.style.display = "none";
+
+    // loops through array and prints to scoreboard
+    // for (let i = 0; i < scoreArray.length; i++) {
+    //     let element = document.createElement('p');
+    //     element.classList.add('score-output', 'node');
+    //     element.innerHTML = `Score: ${scoreArray[i].hits} | 
+    //                          Accuracy: ${scoreArray[i].percentage} |
+    //                          ${scoreArray[i].date}`
+
+    //     scoreBoard.append(element);
+    // }
+    printToScoreboard(scoreArray);
 }
 
 let audio = new Audio('./assets/media/gamemusic.mp3');
 
+function printToScoreboard(array) {
+    for (let i = 0; i < array.length; i++) {
+        let element = document.createElement('p');
+        element.classList.add('score-output', 'node');
+        element.innerHTML = `Score: ${array[i].hits} | 
+                             Accuracy: ${array[i].percentage} |
+                             ${array[i].date}`
+
+        scoreBoard.append(element);
+    }
+}
 
 // Hides the welcome screen and begins game
 onEvent('click', startButton, function() {
@@ -145,9 +168,25 @@ function getDate() {
     return `${hh}:${mm}`;
 }
 
+// checks local storage for playerscores
+let localStorageArray;
+if (localStorage.getItem('playerscores') === null) {
+    console.log(`No scores found`);
+} else {
+    // get localStorage objects
+    localStorageArray = JSON.parse(localStorage.getItem('playerscores'))
+    console.log(localStorageArray);
+
+    // for (const player of jsonParse) {
+    //     console.log(`Score: ${player.hits} | Percentage: ${player.percentage} | ${player.date}`);
+    // }
+}
+
 
 // print to scoreboard
 let scoreArray = [];
+scoreArray.push(...localStorageArray);
+console.log(scoreArray);
 let scoreBoardArray = [];
 function getScore() {
 
@@ -173,16 +212,18 @@ function getScore() {
     
 
     // loops through array and prints to scoreboard
-    for (let i = 0; i < displayScoreBoard.length; i++) {
-        let element = document.createElement('p');
-        element.classList.add('score-output', 'node');
-        element.innerHTML = `Score: ${displayScoreBoard[i].hits} | 
-                             Accuracy: ${displayScoreBoard[i].percentage} |
-                             ${displayScoreBoard[i].date}`
+    // for (let i = 0; i < displayScoreBoard.length; i++) {
+    //     let element = document.createElement('p');
+    //     element.classList.add('score-output', 'node');
+    //     element.innerHTML = `Score: ${displayScoreBoard[i].hits} | 
+    //                          Accuracy: ${displayScoreBoard[i].percentage} |
+    //                          ${displayScoreBoard[i].date}`
 
-        scoreBoard.append(element);
-    }
-    console.log(displayScoreBoard); 
+    //     scoreBoard.append(element);
+    // }
+    // console.log(displayScoreBoard); 
+    printToScoreboard(displayScoreBoard);
+
 
     function saveDataToLocalStorage(data) {
         let array = [];
@@ -197,15 +238,7 @@ function getScore() {
     });
 }
 
-if (localStorage.getItem('playerscores') === null) {
-    console.log(`No scores found`);
-} else {
-    let jsonParse = JSON.parse(localStorage.getItem('playerscores'));
-    console.log(jsonParse);
-    for (const player of jsonParse) {
-        console.log(`Score: ${player.hits} | Percentage: ${player.percentage} | ${player.date}`);
-    }
-}
+
 
 
 
