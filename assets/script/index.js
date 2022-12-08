@@ -46,15 +46,16 @@ window.onload = (event) => {
         localStorageArray = JSON.parse(localStorage.getItem('playerscores'))
         
         // sorts and returns a sorted array from local storage
-        let sortedLocalStorageArray;
-        let sortedScore = (localStorageArray) => {
-            return localStorageArray.sort((a, b) => {
-                return b.hits - a.hits;
-            });
-        }
-        sortedLocalStorageArray = sortedScore(localStorageArray);
+        // let sortedLocalStorageArray;
+        // let sortedScore = (localStorageArray) => {
+        //     return localStorageArray.sort((a, b) => {
+        //         return b.hits - a.hits;
+        //     });
+        // }
+        // sortedLocalStorageArray = sortedScore(localStorageArray);
         // add the array to the global score array
-        scoreArray.push(...sortedLocalStorageArray);
+        scoreArray.push(...localStorageArray);
+        scoreArray.splice(9)
         printToScoreboard(scoreArray);
 }
     
@@ -212,9 +213,19 @@ function getScore() {
         let array = [];
         array = JSON.parse(localStorage.getItem('playerscores')) || [];
         array.push(data);
-        
 
-        localStorage.setItem('playerscores', JSON.stringify(array));
+        let sortedArray;
+        let sortedScore = (array) => {
+            return array.sort((a, b) => {
+                return b.hits - a.hits;
+            });
+        }
+        // add the array to the global score array
+        sortedArray = sortedScore(array);
+        
+        // cut off array at 9th index
+        let newArray = array.slice(0, 9)
+        localStorage.setItem('playerscores', JSON.stringify(newArray));
     }
     saveDataToLocalStorage({
         date: score.date,
