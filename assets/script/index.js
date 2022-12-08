@@ -58,7 +58,7 @@ function printToScoreboard(array) {
         let element = document.createElement('p');
         element.classList.add('score-output', 'node');
         element.innerHTML = `Score: ${array[i].hits} | 
-                             Accuracy: ${array[i].percentage}% |
+                             hackPower: ${array[i].percentage}% |
                              ${array[i].date}`
 
         scoreBoard.append(element);
@@ -174,12 +174,16 @@ function getDate() {
     return `${[year, month, day].join('-')} ${hh}:${mm}`;
 }
 
+function hackProgress() {
+    return Math.trunc((scoreCount / 60) * 100);
+}
+
 // print to scoreboard
 let scoreArray = [];
 let scoreBoardArray = [];
 function getScore() {
 
-    const score = new Score(getDate(), scoreCount, 100);
+    const score = new Score(getDate(), scoreCount, hackProgress());
     scoreArray.push(score);
 
     let sortedScore = (scoreArray) => {
