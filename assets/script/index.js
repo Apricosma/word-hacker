@@ -44,16 +44,6 @@ window.onload = (event) => {
     } else {
         // get localStorage objects
         localStorageArray = JSON.parse(localStorage.getItem('playerscores'))
-        
-        // sorts and returns a sorted array from local storage
-        // let sortedLocalStorageArray;
-        // let sortedScore = (localStorageArray) => {
-        //     return localStorageArray.sort((a, b) => {
-        //         return b.hits - a.hits;
-        //     });
-        // }
-        // sortedLocalStorageArray = sortedScore(localStorageArray);
-        // add the array to the global score array
         scoreArray.push(...localStorageArray);
         scoreArray.splice(9)
         printToScoreboard(scoreArray);
@@ -241,17 +231,25 @@ function endGame() {
 
     getScore();
 
-    if (scoreCount < 20) {
-        randomizedWord.innerHTML = `Score: ${scoreCount} | Less than 20? The firewall annihilated you`;
-    } else if (scoreCount.hits < 40) {
-        randomizedWord.innerHTML = `Score: ${scoreCount} | Couldn\'t get over 40? Close, but no cigar`;
-    } else if (scoreCount.hits < 60) {
-        randomizedWord.innerHTML = `Score: ${scoreCount} | You hacked into the mainframe, but elite cyber security detected your presence`;
-    } else if (scoreCount.hits < 80) {
-        randomizedWord.innerHTML = `Score: ${scoreCount} | You managed to hack into the mainframe undetected!`;
-    } else if (scoreCount.hits >= 100) {
-        randomizedWord.innerHTML = `Score: ${scoreCount} | WOW! You\'re an ELITE hacker <br> why are you here? Go do something useful!`;
+    if (scoreCount >= 100) {
+        randomizedWord.innerHTML = `Score: ${scoreCount} | WOW! You're an ELITE hacker <br> why are you here? Go do something useful!`;
     }
+    if (scoreCount <= 80) {
+        randomizedWord.innerHTML = `Score: ${scoreCount} | You managed to hack into the mainframe undetected!`;
+    }
+    if (scoreCount <= 60) {
+        randomizedWord.innerHTML = `Score: ${scoreCount} | You hacked into the mainframe <br> but elite cyber security detected your presence`;
+    } 
+    if (scoreCount <= 40) {
+        randomizedWord.innerHTML = `Score: ${scoreCount} | Couldn't get over 40? <br> Close, but no cigar`;
+    } 
+    if (scoreCount <= 20) {
+        randomizedWord.innerHTML = `Score: ${scoreCount} | Less than 20? <br> The firewall annihilated you`;
+    }  
+    
+    
+    
+    
     audio.pause();
     audio.currentTime = 0;
     scoreCount = 0;

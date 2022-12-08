@@ -8,6 +8,7 @@
 body {
     background-color: var(--app-dark-bg);
     color: var(--app-pink);
+    background-image: url(https://fauux.neocities.org/bg_66.gif);
 }
     
 .container {
@@ -23,15 +24,30 @@ body {
     flex-direction: column;
 }
 
+@font-face {
+    font-family: 'LcdSolid';
+    src: url('../media/LcdSolid-VPzB.ttf');
+}
+
+@font-face {
+    font-family: 'Matrix';
+    src: url('../media/Matrix-MZ4P.ttf');
+}
+
 /* - - - - - - - - - - - - - - - - */
 /* Welcome Screen                  */
 /* - - - - - - - - - - - - - - - - */
 
 .game-box h2 {
     letter-spacing: 2px;
-    margin-top: 325px;
+    margin-top: 260px;
+    width: 1000px;
     margin-bottom: 10px;
     font-size: 48px;
+    /* text-align: justify; */
+    font-weight: 300;
+    font-family: 'LcdSolid';
+    padding-top: 100px;
 }
 
 .start-game, .restart {
@@ -50,6 +66,7 @@ body {
 
 .game-box p {
     font-size: 24px;
+    font-weight: 300;
 }
 
 .game-box p:last-of-type {
@@ -61,7 +78,9 @@ body {
 /* - - - - - - - - - - - - - - - - */
 
 .game {
-    margin-top: 400px;
+    margin-top: 260px;
+    background-color: #050505;
+    height: 500px;
 }
 
 .user-input {
@@ -73,6 +92,11 @@ body {
     padding: 5px 0;
     font-size: 28px;
     text-align: center;
+    font-family: 'Oswald';
+}
+
+input[type=button] {
+    font-family: 'Oswald';
 }
 
 .timer {
@@ -85,29 +109,57 @@ body {
     letter-spacing: 2px;
     font-weight: 400;
     margin-bottom: 5px;
+    font-family: 'Oswald';
 }
 
 .next-word {
     display: none;
     color: #c7486862;
     position: absolute;
-    right: 750px;
+    right: 740px;
     top: 425px;
+    font-family: 'Oswald';
 }
 
 .hackercode {
     width: 500px;
+    font-family: 'Matrix';
+    font-weight: 600;
+    letter-spacing: 4px;
 }
 
 .hacker-container {
     position: absolute;
+    border-right: #c74868 solid 1px;
+    height: 100vh;
+    background-color: #050505;
 }
 
 .score-board {
     background-color: var(--app-dark-bg);
-    width: 400px;
-    height: 800px;
+    width: 500px;
+    height: 100vh;
     position: absolute;
-    right: 0;
-    top: 0;
+    right: 0px;
+    top: 0px;
+    padding: 10px 5px;
+    font-size: 18px;
+    line-height: 30px;
+    font-weight: 300;
+    text-align: left;
+    font-family: 'LcdSolid';
+    border-left: #c74868 solid 1px;
+}
+
+.dev-record {
+    margin-bottom: 20px;
+}
+
+.glow {
+    text-shadow: 0 0 10px #c5198c;
+}
+
+.welcome {
+    background-color: #050505;
+    height: 500px;
 }
