@@ -68,7 +68,7 @@ function printToScoreboard(array) {
         let element = document.createElement('p');
         element.classList.add('score-output', 'node');
         element.innerHTML = `Score: ${array[i].hits} | 
-                             Accuracy: ${array[i].percentage} |
+                             Accuracy: ${array[i].percentage}% |
                              ${array[i].date}`
 
         scoreBoard.append(element);
@@ -242,15 +242,15 @@ function endGame() {
     getScore();
 
     if (scoreCount < 20) {
-        randomizedWord.innerHTML = 'Less than 20? The firewall annihilated you';
+        randomizedWord.innerHTML = `Score: ${scoreCount} | Less than 20? The firewall annihilated you`;
     } else if (scoreCount.hits < 40) {
-        randomizedWord.innerHTML = 'Couldn\'t get over 40? Close, but no cigar';
+        randomizedWord.innerHTML = `Score: ${scoreCount} | Couldn\'t get over 40? Close, but no cigar`;
     } else if (scoreCount.hits < 60) {
-        randomizedWord.innerHTML = 'You hacked into the mainframe, but elite cyber security detected your presence';
+        randomizedWord.innerHTML = `Score: ${scoreCount} | You hacked into the mainframe, but elite cyber security detected your presence`;
     } else if (scoreCount.hits < 80) {
-        randomizedWord.innerHTML = 'You managed to hack into the mainframe undetected!';
+        randomizedWord.innerHTML = `Score: ${scoreCount} | You managed to hack into the mainframe undetected!`;
     } else if (scoreCount.hits >= 100) {
-        randomizedWord.innerHTML = 'WOW! You\'re an ELITE hacker <br> why are you here? Go do something useful!';
+        randomizedWord.innerHTML = `Score: ${scoreCount} | WOW! You\'re an ELITE hacker <br> why are you here? Go do something useful!`;
     }
     audio.pause();
     audio.currentTime = 0;
